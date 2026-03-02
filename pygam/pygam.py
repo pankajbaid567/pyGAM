@@ -2367,6 +2367,17 @@ class GAM(Core, MetaTermMixin):
 
         return coef_draws
 
+    def __sklearn_tags__(self):
+        try:
+            from sklearn.utils._tags import TargetTags, RegressorTags, Tags
+            return Tags(
+                estimator_type="regressor",
+                target_tags=TargetTags(required=True),
+                regressor_tags=RegressorTags(),
+            )
+        except ImportError:
+            return None
+
 
 class LinearGAM(GAM):
     """Linear GAM.
@@ -2680,6 +2691,17 @@ class LogisticGAM(GAM):
             containing expected values under the model
         """
         return self.predict_mu(X)
+
+    def __sklearn_tags__(self):
+        try:
+            from sklearn.utils._tags import TargetTags, ClassifierTags, Tags
+            return Tags(
+                estimator_type="classifier",
+                target_tags=TargetTags(required=True),
+                classifier_tags=ClassifierTags(),
+            )
+        except ImportError:
+            return None
 
 
 class PoissonGAM(GAM):
